@@ -37,9 +37,10 @@ class RegisterController extends BaseController
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['name'] =  $user->name;
+            $success['id'] = $user->id;
 
             return $this->sendResponse($success, 'User login successfully.');
         }
-        return $this->sendError('Unauthorized.', ['error'=>'Unauthorized']);
+        return $this->sendError('Bad Credentials.', ['error'=>"Credentials doesn't match out records!"]);
     }
 }

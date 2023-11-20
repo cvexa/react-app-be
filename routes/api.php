@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +22,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::get('top-three', [PropertyController::class, 'topThree'])->name('top-three');
+Route::get('property-types',[PropertyController::class, 'propertyTypes'])->name('get-property-types');
+Route::fallback(function(){
+    return response()->json(['message' => 'not found'], 404);
+});
 
 Route::middleware('auth:api')->group( function () {
    Route::get('test', function () {
       return 'ok';
    });
+
+    Route::resource('properties', PropertyController::class);
 });

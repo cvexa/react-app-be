@@ -73,7 +73,7 @@ class PropertyController extends Controller
         $topThere = Property::where([
             ['is_top', 1],
             ['published', 1]
-        ])->limit(3)->get();
+        ])->limit($request->limit ?? 3)->get();
 
         return response()->json($topThere, 200);
     }

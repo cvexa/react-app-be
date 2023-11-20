@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends BaseController
@@ -42,5 +44,17 @@ class RegisterController extends BaseController
             return $this->sendResponse($success, 'User login successfully.');
         }
         return $this->sendError('Bad Credentials.', ['error'=>"Credentials doesn't match out records!"]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $user = Auth::user()->token();
+        $user->revoke();
+
+        return response()->json(['success' => 'logged out'],200);
     }
 }

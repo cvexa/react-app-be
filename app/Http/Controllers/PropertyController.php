@@ -11,9 +11,11 @@ class PropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $properties = Property::where('published',1)->paginate($request->per_page ?? 6);
+
+        return response()->json($properties);
     }
 
     /**
@@ -35,9 +37,13 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Property $property)
     {
-        //
+        if($property->published == 1) {
+            return response()->json($property);
+        }
+
+        return response()->json(['not found'],404);
     }
 
     /**
@@ -78,6 +84,19 @@ class PropertyController extends Controller
         return response()->json($topThere, 200);
     }
 
+    public function featuredProperty(Request $request)
+    {
+        $featProperty = Property::where([
+            ['is_featured', 1],
+            ['published', 1]
+        ])->first();
+
+        return response()->json($featProperty, 200);
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function propertyTypes()
     {
         return response()->json([
@@ -86,5 +105,21 @@ class PropertyController extends Controller
            'Penthouse',
            'Luxury Vila'
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $type
+     * @return JsonResponse
+     */
+    public function bestDealByType(Request $request, $type)
+    {
+        $bestDealByType = Property::where([
+            ['is_best_deal', 1],
+            ['published', 1],
+            ['type','LIKE','%'.$type.'%']
+        ])->first();
+
+        return response()->json($bestDealByType);
     }
 }

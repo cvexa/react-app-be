@@ -27,12 +27,16 @@ Route::get('property-types',[PropertyController::class, 'propertyTypes'])->name(
 Route::fallback(function(){
     return response()->json(['message' => 'not found'], 404);
 });
+Route::get('featured-property', [PropertyController::class, 'featuredProperty'])->name('featured-property');
+Route::get('best-deal-by-type/{type}', [PropertyController::class, 'bestDealByType'])->name('best-property-by-type');
+Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 
 Route::middleware('auth:api')->group( function () {
    Route::get('test', function () {
       return 'ok';
    });
 
-    Route::resource('properties', PropertyController::class);
+    Route::resource('properties', PropertyController::class)->except('index','show');
     Route::post('logout', [RegisterController::class, 'logOut'])->name('logout');
 });

@@ -19,6 +19,25 @@ class PropertyController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getByType(Request $request)
+    {
+        $type = $request->type;
+
+        $properties = Property::where([
+            ['published',1],
+        ])->when($type !== 'null', function($w) use($type) {
+            $w->where(function($q) use ($type) {
+                $q->where('type', $type);
+            });
+        })->paginate($request->per_page ?? 6);
+
+        return response()->json($properties);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

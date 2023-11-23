@@ -31,6 +31,7 @@ Route::get('featured-property', [PropertyController::class, 'featuredProperty'])
 Route::get('best-deal-by-type/{type}', [PropertyController::class, 'bestDealByType'])->name('best-property-by-type');
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
+Route::get('/properties-by-type', [PropertyController::class, 'getByType'])->name('properties-by-type');
 
 Route::middleware('auth:api')->group( function () {
    Route::get('test', function () {

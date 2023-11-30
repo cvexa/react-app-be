@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::post('register', [RegisterController::class, 'register']);
-Route::post('login', [RegisterController::class, 'login']);
+Route::post('login', [RegisterController::class, 'login'])->name('login');
 Route::get('top-three', [PropertyController::class, 'topThree'])->name('top-three');
 Route::get('property-types',[PropertyController::class, 'propertyTypes'])->name('get-property-types');
 Route::fallback(function(){
@@ -40,4 +41,6 @@ Route::middleware('auth:api')->group( function () {
 
     Route::resource('properties', PropertyController::class)->except('index','show');
     Route::post('logout', [RegisterController::class, 'logOut'])->name('logout');
+    Route::resource('users', UserController::class);
+
 });

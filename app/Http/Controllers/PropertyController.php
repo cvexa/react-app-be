@@ -86,7 +86,13 @@ class PropertyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $property = Property::find($id);
+
+        if($property) {
+            $property->delete();
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     /**

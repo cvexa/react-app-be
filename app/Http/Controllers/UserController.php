@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -12,7 +13,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $properties = User::paginate($request->per_page ?? 6);
+        $properties = [];
+
+        if(Auth::user()->role == 'admin') {
+            $properties = User::paginate($request->per_page ?? 6);
+        }
 
         return response()->json($properties);
     }
@@ -38,7 +43,9 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+
+        return response()->json($user);
     }
 
     /**
@@ -54,7 +61,15 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        if($user) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+        }
+
+        return response()->json(['status' => 'success', 'data' => $user]);
     }
 
     /**
@@ -62,6 +77,12 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+
+        if($user) {
+            $user->delete();
+        }
+
+        return response()->json(['status' => 'success']);
     }
 }

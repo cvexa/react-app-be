@@ -42,5 +42,4 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('properties', PropertyController::class)->except('index','show');
     Route::post('logout', [RegisterController::class, 'logOut'])->name('logout');
     Route::resource('users', UserController::class);
-
 });

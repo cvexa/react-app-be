@@ -50,7 +50,20 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        foreach($request->all() as $field => $value) {
+            if(empty($value) || $value === '') {
+                unset($data[$field]);
+            }
+            if($value === true) {
+                $data[$field] = 1;
+            }
+            if($value === false) {
+                $data[$field] = 0;
+            }
+        }
+        $property = Property::create($data);
+        return response()->json(['success' => true, 'property' => $property]);
     }
 
     /**
@@ -78,7 +91,22 @@ class PropertyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->all();
+        $property = Property::find($id);
+        foreach($request->all() as $field => $value) {
+            if(empty($value) || $value === '') {
+                unset($data[$field]);
+            }
+            if($value === true) {
+                $data[$field] = 1;
+            }
+            if($value === false) {
+                $data[$field] = 0;
+            }
+        }
+        $property->update($data);
+
+        return response()->json(['success' => true, 'property' => $property]);
     }
 
     /**

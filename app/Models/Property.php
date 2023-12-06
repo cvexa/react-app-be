@@ -10,4 +10,5 @@ class Property extends Model
     use HasFactory;
 
     protected $talbe = 'properties';
+    protected $guarded = [];
 }

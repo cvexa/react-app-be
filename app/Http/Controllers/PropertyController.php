@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\Token;
 
 class PropertyController extends Controller
 {
@@ -13,9 +16,33 @@ class PropertyController extends Controller
      */
     public function index(Request $request)
     {
-        $properties = Property::where('published',1)->paginate($request->per_page ?? 6);
+        $user = $this->findUserByHeader($request);
 
+        if(is_null($user) || $user->role !== 'admin') {
+            $properties = Property::where('published', 1)->paginate($request->per_page ?? 6);
+        }else{
+            $properties = Property::paginate($request->per_page ?? 6);
+        }
         return response()->json($properties);
+    }
+
+    private function findUserByHeader(Request $request)
+    {
+        $access_token = $request->header('Authorization');
+        $user = null;
+        if($access_token) {
+            $auth_header = explode(' ', $access_token);
+            $token = $auth_header[1];
+            $token_parts = explode('.', $token);
+            $token_header = $token_parts[1];
+            $token_header_json = base64_decode($token_header);
+            $token_header_array = json_decode($token_header_json, true);
+            $token_id = $token_header_array['jti'];
+
+            $user = Token::find($token_id)->user;
+        }
+
+        return $user;
     }
 
     /**
@@ -69,9 +96,18 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Property $property)
+    public function show(Request $request,Property $property)
     {
-        if($property->published == 1) {
+        $user = $this->findUserByHeader($request);
+        if(is_null($user) && $property->published == 1) {
+            return response()->json($property);
+        }
+
+        if($user->role == 'admin') {
+            return response()->json($property);
+        }
+
+        if($user->role == 'user' && $property->published == 1) {
             return response()->json($property);
         }
 

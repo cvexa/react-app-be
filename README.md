@@ -72,3 +72,7 @@ Client secret: yM9uBev0bGYxZx8PmDJEShzGSDt57xa8bLQX1P08
 Password grant client created successfully.
 Client ID: 2
 Client secret: aAmRk0LXhzb91qUgM2JWjTpqTG9CPkXXYWtkXvZc
+
+## Application endpoints 
+
+![img.png](img.png)

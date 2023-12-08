@@ -33,6 +33,7 @@ Route::get('best-deal-by-type/{type}', [PropertyController::class, 'bestDealByTy
 Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 Route::get('/properties-by-type', [PropertyController::class, 'getByType'])->name('properties-by-type');
+Route::get('/check-available-featured/{property}', [PropertyController::class, 'checkAvailableFeatured'])->name('check-available-featured');
 
 Route::middleware('auth:api')->group( function () {
    Route::get('test', function () {

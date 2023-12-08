@@ -19,9 +19,14 @@ class PropertyController extends Controller
         $user = $this->findUserByHeader($request);
 
         if(is_null($user) || $user->role !== 'admin') {
-            $properties = Property::where('published', 1)->paginate($request->per_page ?? 6);
+            $properties = Property::with('creator')
+                ->when(isset($user->id), function($w) use($user) {
+                    $w->where('created_by', $user->id);
+                })
+                ->orWhere('published', 1)
+                ->paginate($request->per_page ?? 6);
         }else{
-            $properties = Property::paginate($request->per_page ?? 6);
+            $properties = Property::with('creator')->paginate($request->per_page ?? 6);
         }
         return response()->json($properties);
     }
@@ -53,7 +58,7 @@ class PropertyController extends Controller
     {
         $type = $request->type;
 
-        $properties = Property::where([
+        $properties = Property::with('creator')->where([
             ['published',1],
         ])->when($type !== 'null', function($w) use($type) {
             $w->where(function($q) use ($type) {
@@ -89,6 +94,7 @@ class PropertyController extends Controller
                 $data[$field] = 0;
             }
         }
+        $data['created_by'] = Auth::user()?->id;
         $property = Property::create($data);
         return response()->json(['success' => true, 'property' => $property]);
     }
@@ -100,15 +106,17 @@ class PropertyController extends Controller
     {
         $user = $this->findUserByHeader($request);
         if(is_null($user) && $property->published == 1) {
-            return response()->json($property);
+            return response()->json($property->load('creator'));
         }
 
         if($user->role == 'admin') {
-            return response()->json($property);
+            return response()->json($property->load('creator'));
         }
 
-        if($user->role == 'user' && $property->published == 1) {
-            return response()->json($property);
+        if($user->role == 'user') {
+            if($property->published == 1 || $property->load('creator')->creator->id == $user->id) {
+                return response()->json($property->load('creator'));
+            }
         }
 
         return response()->json(['not found'],404);
@@ -140,9 +148,12 @@ class PropertyController extends Controller
                 $data[$field] = 0;
             }
         }
+        if(isset($data['creator'])){
+            unset($data['creator']);
+        }
         $property->update($data);
 
-        return response()->json(['success' => true, 'property' => $property]);
+        return response()->json(['success' => true, 'property' => $property->load('creator')]);
     }
 
     /**

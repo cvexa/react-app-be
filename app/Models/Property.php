@@ -11,4 +11,9 @@ class Property extends Model
 
     protected $talbe = 'properties';
     protected $guarded = [];
+
+    public function creator()
+    {
+        return $this->hasOne(User::class,'id','created_by');
+    }
 }

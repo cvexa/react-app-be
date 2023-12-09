@@ -582,6 +582,47 @@
 			"response": []
 		},
 		{
+			"name": "cveck-available-featured by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWQ0ZDFjN2ViOWVhMzg5YzIyZDA3N2M2NzNiNTg3NmNiMTdhZDk3ZTZmMDhjNjQxMmVkNzI2MTcwYzMxMTNjZDBkNWNmMDcyYzQ2NjE3YmUiLCJpYXQiOjE2OTgzMTk2NzkuMjAwOTA0LCJuYmYiOjE2OTgzMTk2NzkuMjAwOTA3LCJleHAiOjE3MTQxMzA4NzkuMTkzOTA2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.f_3cfbRCwfbxDi99Tu7I39FFF2EgL_tWwwHqvyoxB3is9uLQoBKiJSNxNMjO3BNJ8WBytq2aNzRygFDMPBggThhVa27QWhTObddWNca8E34dt5qgJEmjczerptt7RIlW7DM7f0mrMOfkbDPyGRyzXW0hF8Xq925Gm3mO-tuR3_78wKlVuWlDvHmeFO4gEGi6xTx1_sDUeRoYz9i5YusQkX-iYMk6QVI2-EIoJ1xmpupxC5kKRBPfa6NZp86Duw1_axCLx_1mKOjyLmgSVRoE1G2G4TStuYg3CG2MLAzhDUexjjzVziyTJeAYXEFuH8MyML7f0LwVriXv8aMblxwwOR30Ad1GiqLbRGHOJ54GZwzT_yOEs_r6TYy09GwbB6ZxvIS1pqr3uvfW5y2U3a84L0RF3Ak9y44_H6GfWwsleVqDCWxyHuXmoKTmypFhv60Sfm4nt2QEqJt9GwbtHE58oYAJ2DfM0yJMqhJ9mpYG-ayMGaB4s0DCrrdiCJdHtl4trkjNvHD0ajOJvVf4b52QunWSVYGh4nMU9IPZG1FGnLOpIs_8lfrNXn_oeSvXi0ftk33ltgRBNOFfHetlffuH8iFOk_nigk7_LrdagdxC8KD5zZ7fQdOa3MjE4RgAyAAZjo1t4lX1f53_VvFHMbHNVvK8cV_s6i1iTLU35NqM0DA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:8000/api/check-available-featured/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"check-available-featured",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user update by id",
 			"request": {
 				"auth": {

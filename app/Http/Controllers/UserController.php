@@ -63,13 +63,15 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if(User::where('email', $request->email)->first()) {
+        if($request->email && User::where('email', $request->email)->first()) {
             return response()->json(['error' => 'Emails should be unique'], 400);
         }
 
         if($user) {
             $user->name = $request->name;
-            $user->email = $request->email;
+            if($request->email) {
+                $user->email = $request->email;
+            }
             $user->save();
         }
 

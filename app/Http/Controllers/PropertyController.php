@@ -194,8 +194,9 @@ class PropertyController extends Controller
         return response()->json($featProperty, 200);
     }
 
-    public function checkAvailableFeatured($property)
+    public function checkAvailableFeatured(Request $request)
     {
+        $property = $request->property ?? null;
         $featPropertyCount = Property::where([
             ['is_featured', 1],
             ['published', 1]
@@ -205,15 +206,16 @@ class PropertyController extends Controller
         if($featPropertyCount < 1) {
             $isAllowed = true;
         }
+        if($property && !is_null($property)) {
+            $featuredProperty = Property::where([
+                ['is_featured', 1],
+                ['published', 1],
+                ['id', $property]
+            ])->first();
 
-        $featuredProperty = Property::where([
-            ['is_featured', 1],
-            ['published', 1],
-            ['id',$property]
-        ])->first();
-
-        if($featuredProperty) {
-            $isAllowed = true;
+            if ($featuredProperty) {
+                $isAllowed = true;
+            }
         }
 
         return response()->json(['isAllowed' => $isAllowed]);

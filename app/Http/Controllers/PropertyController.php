@@ -96,7 +96,7 @@ class PropertyController extends Controller
         }
         $data['created_by'] = Auth::user()?->id;
         $property = Property::create($data);
-        return response()->json(['success' => true, 'property' => $property]);
+        return response()->json(['success' => true, 'property' => $property->load('creator')]);
     }
 
     /**
